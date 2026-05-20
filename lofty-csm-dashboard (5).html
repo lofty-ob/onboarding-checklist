@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lofty Onboarding — CSM Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:#0057FF; --blue-light:#E8F0FF;
+    --green:#1A9E5C; --green-light:#E6F7EF;
+    --amber:#D97706; --amber-light:#FEF3C7;
+    --red:#DC2626; --red-light:#FEE2E2;
+    --surf:#fff; --surf2:#F7F8FA; --surf3:#EEF0F4;
+    --t1:#0D1117; --t2:#4B5563; --t3:#9CA3AF; --border:#E5E7EB;
+    --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+    --shadow-md:0 4px 16px rgba(0,0,0,.09);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;background:var(--surf2);color:var(--t1);min-height:100vh}
+
+  .hdr{background:var(--surf);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .logo{font-size:17px;font-weight:600;letter-spacing:-.3px}
+  .logo span{color:var(--blue)}
+  .logo-tag{font-size:11px;font-weight:400;color:var(--t3);letter-spacing:.2px;margin-left:8px;background:var(--surf3);padding:2px 8px;border-radius:4px;vertical-align:middle}
+  .hdr-r{display:flex;align-items:center;gap:10px}
+  .sync-row{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);font-family:'DM Mono',monospace}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--green);transition:background .3s}
+  .btn{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surf);color:var(--t1);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:background .1s}
+  .btn:hover{background:var(--surf2)}
+  .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .btn.primary:hover{background:#0049D6}
+
+  .main{max-width:1200px;margin:0 auto;padding:28px 24px 60px}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px}
+  .stat{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+  .stat-label{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+  .stat-val{font-size:26px;font-weight:600;letter-spacing:-.5px;line-height:1}
+  .stat-sub{font-size:11px;color:var(--t3);margin-top:4px}
+
+  /* TOOLBAR */
+  .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+  .toolbar h2{font-size:15px;font-weight:600}
+  .toolbar-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .search{font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surf);color:var(--t1);outline:none;width:200px;transition:border-color .15s}
+  .search:focus{border-color:var(--blue)}
+  .sel{font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surf);color:var(--t1);outline:none;cursor:pointer}
+
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+
+  /* CARD */
+  .card{background:var(--surf);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s;cursor:default}
+  .card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+  .card-head{padding:16px 18px 12px;display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid var(--border)}
+  .avatar{width:42px;height:42px;border-radius:10px;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;font-family:'DM Mono',monospace;letter-spacing:-.5px}
+  .card-info{flex:1;min-width:0}
+  .card-name{font-size:15px;font-weight:600;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card-id{font-size:11px;font-family:'DM Mono',monospace;color:var(--t3);margin-top:2px}
+  .sbadge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+  .sb-complete{background:var(--green-light);color:var(--green)}
+  .sb-active{background:var(--blue-light);color:var(--blue)}
+  .sb-new{background:var(--surf3);color:var(--t2)}
+
+  .card-body{padding:14px 18px}
+  .prog-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .prog-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;width:72px;flex-shrink:0}
+  .prog-track{flex:1;height:5px;background:var(--surf3);border-radius:3px;overflow:hidden}
+  .prog-fill{height:100%;border-radius:3px;transition:width .5s ease}
+  .prog-pct{font-size:11px;font-family:'DM Mono',monospace;min-width:32px;text-align:right;color:var(--t2)}
+
+  .sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-top:10px}
+  .sec-row{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)}
+  .sec-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  .sec-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sec-c{font-size:10px;font-family:'DM Mono',monospace;color:var(--t3)}
+
+  .card-foot{padding:10px 18px;border-top:1px solid var(--border);background:var(--surf2);display:flex;align-items:center;justify-content:space-between}
+  .upd-lbl{font-size:11px;color:var(--t3);font-family:'DM Mono',monospace}
+  .open-btn{font-size:12px;font-weight:500;color:var(--blue);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0}
+  .del-btn{font-size:13px;background:none;border:none;cursor:pointer;color:var(--t3);padding:0;transition:color .15s;line-height:1}
+  .del-btn:hover{color:var(--red)}
+  .note-btn{font-size:12px;font-weight:500;color:var(--t2);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;transition:color .15s}
+  .note-btn:hover{color:var(--blue)}
+  .note-panel{display:none;padding:10px 18px 12px;border-top:1px solid var(--border);background:var(--surf)}
+  .note-panel.open{display:block}
+  .note-area{width:100%;font-family:'DM Sans',sans-serif;font-size:12px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;resize:vertical;min-height:70px;outline:none;color:var(--t1);background:var(--surf2);transition:border-color .15s;line-height:1.5}
+  .note-area:focus{border-color:var(--blue);background:var(--surf)}
+  .note-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
+  .note-save{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:5px 12px;background:var(--blue);color:white;border:none;border-radius:6px;cursor:pointer}
+  .note-save:hover{background:#0049D6}
+  .note-cancel{font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 10px;background:none;border:1px solid var(--border);border-radius:6px;cursor:pointer;color:var(--t2)}
+  .note-cancel:hover{background:var(--surf2)}
+  .note-preview{font-size:12px;color:var(--t2);line-height:1.5;white-space:pre-wrap;padding:8px 10px;background:var(--surf2);border-radius:7px;border:1px solid var(--border)}
+  .copy-btn{font-size:11px;color:var(--t3);background:none;border:none;cursor:pointer;font-family:'DM Mono',monospace;padding:0;margin-left:8px}
+  .copy-btn:hover{color:var(--blue)}
+
+  /* EMPTY */
+  .empty{grid-column:1/-1;text-align:center;padding:56px 24px;background:var(--surf);border:1px solid var(--border);border-radius:14px}
+  .empty h3{font-size:16px;font-weight:500;color:var(--t2);margin-bottom:6px}
+  .empty p{font-size:13px;color:var(--t3)}
+
+  /* MODAL */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center}
+  .overlay.open{display:flex}
+  .modal{background:var(--surf);border-radius:16px;padding:28px 32px;width:100%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+  .modal h3{font-size:18px;font-weight:600;margin-bottom:20px}
+  .field{margin-bottom:14px}
+  .field label{font-size:13px;font-weight:500;display:block;margin-bottom:5px}
+  .field input{font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;width:100%;outline:none;transition:border-color .15s}
+  .field input:focus{border-color:var(--blue)}
+  .field-hint{font-size:11px;color:var(--t3);margin-top:4px;font-family:'DM Mono',monospace;word-break:break-all}
+  .modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+
+  @media(max-width:700px){
+    .hdr{padding:14px 16px}
+    .main{padding:16px 14px 40px}
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo"><span>Lofty</span> Onboarding <span class="logo-tag">CSM Dashboard</span></div>
+  <div class="hdr-r">
+    <div class="sync-row"><div class="dot" id="dot"></div><span id="syncTxt">Loading…</span></div>
+    <button class="btn" onclick="loadAll()">↻ Refresh</button>
+    <button class="btn primary" onclick="openModal()">+ Add Client</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total Clients</div><div class="stat-val" id="s-tot">—</div><div class="stat-sub">being onboarded</div></div>
+    <div class="stat"><div class="stat-label">Avg Tasks Done</div><div class="stat-val" id="s-avg" style="color:var(--blue)">—</div><div class="stat-sub">across all clients</div></div>
+    <div class="stat"><div class="stat-label">Complete</div><div class="stat-val" id="s-cmp" style="color:var(--green)">—</div><div class="stat-sub">fully onboarded</div></div>
+    <div class="stat"><div class="stat-label">In Progress</div><div class="stat-val" id="s-act" style="color:var(--blue)">—</div><div class="stat-sub">actively working</div></div>
+    <div class="stat"><div class="stat-label">Not Started</div><div class="stat-val" id="s-new" style="color:var(--t3)">—</div><div class="stat-sub">no activity yet</div></div>
+  </div>
+
+  <div class="toolbar">
+    <h2>Client Accounts</h2>
+    <div class="toolbar-controls">
+      <input class="search" type="text" id="srch" placeholder="Search clients…" oninput="render()"/>
+      <select class="sel" id="stFil" onchange="render()">
+        <option value="">All statuses</option>
+        <option value="complete">Complete</option>
+        <option value="active">In Progress</option>
+        <option value="new">Not Started</option>
+      </select>
+      <select class="sel" id="sortFil" onchange="render()">
+        <option value="name">Sort: Name</option>
+        <option value="tasks">Sort: Tasks done</option>
+        <option value="recent">Sort: Recent</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- Add Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3>Add New Client</h3>
+    <div class="field">
+      <label>Client ID <span style="color:var(--red)">*</span></label>
+      <input id="m-id" type="text" placeholder="e.g. smith-real-estate" maxlength="60" oninput="updateHint()"/>
+      <div class="field-hint" id="m-hint"></div>
+    </div>
+    <div class="field">
+      <label>Display Name</label>
+      <input id="m-name" type="text" placeholder="e.g. Smith Real Estate Group"/>
+    </div>
+    <div class="field">
+      <label>Notes</label>
+      <input id="m-notes" type="text" placeholder="e.g. Enterprise, Chicago market"/>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="addClient()">Add Client</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPA = 'https://oyzfxtaofgigdciwziuv.supabase.co';
+const KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95emZ4dGFvZmdpZ2RjaXd6aXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjI2NTksImV4cCI6MjA5NDc5ODY1OX0.GcK_nk-WQewDlU8oYZJFW5zzFdFfYVyhrP7OqOlVyBI';
+const H    = { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Content-Type': 'application/json' };
+const CHECKLIST = 'https://lofty-ob.github.io/onboarding-checklist/lofty-onboarding-checklist.html';
+
+const SEC = [
+  { name:'Getting Started', color:'#0057FF', prefix:'gs-' },
+  { name:'Settings',        color:'#4B5563', prefix:'settings-' },
+  { name:'IDX Website',     color:'#D97706', prefix:'ws-' },
+  { name:'Lead Org',        color:'#7C3AED', prefix:'crm-' },
+  { name:'Automation',      color:'#059669', prefix:'sp-' },
+  { name:'Transactions',    color:'#BE185D', prefix:'tx-' },
+  { name:'Going Live',      color:'#1A9E5C', prefix:'gl-' },
+];
+
+// Approximate required task total
+const REQ_TOTAL = 85;
+
+let clients = [];
+let meta = {};
+
+async function api(path, opts={}) {
+  const r = await fetch(SUPA + path, { headers: H, ...opts });
+  return r.ok ? r.json() : [];
+}
+
+async function loadAll() {
+  sync('Syncing…', false);
+  try {
+    const [rows, metaRows] = await Promise.all([
+      api('/rest/v1/checklist_progress?select=client_id,state,updated_at'),
+      api('/rest/v1/checklist_meta?select=*').catch(()=>[])
+    ]);
+
+    // rows could be an error object from Supabase if RLS is misconfigured
+    if (!Array.isArray(rows)) {
+      console.error('Supabase error:', rows);
+      sync('Error: ' + (rows?.message || 'Check Supabase RLS'), false);
+      return;
+    }
+
+    meta = {};
+    (metaRows || []).forEach(r => meta[r.client_id] = r);
+    clients = (rows || []).map(r => ({
+      id: r.client_id,
+      state: r.state || {},
+      updatedAt: r.updated_at,
+      done: Object.keys(r.state || {}).length,
+      name: meta[r.client_id]?.name || '',
+      notes: meta[r.client_id]?.notes || ''
+    }));
+    updateStats();
+    render();
+    sync('Updated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), true);
+  } catch(e) {
+    console.error('loadAll error:', e);
+    sync('Error: ' + e.message, false);
+  }
+}
+
+function sync(t, ok) {
+  document.getElementById('syncTxt').textContent = t;
+  document.getElementById('dot').style.background = ok ? '#1A9E5C' : '#F59E0B';
+}
+
+function updateStats() {
+  const n = clients.length;
+  const cmp = clients.filter(c => c.done >= REQ_TOTAL * 0.9).length;
+  const act = clients.filter(c => c.done > 0 && c.done < REQ_TOTAL * 0.9).length;
+  const nw  = clients.filter(c => c.done === 0).length;
+  const avg = n ? Math.round(clients.reduce((a,c)=>a+c.done,0)/n) : 0;
+  document.getElementById('s-tot').textContent = n || '—';
+  document.getElementById('s-avg').textContent = n ? avg : '—';
+  document.getElementById('s-cmp').textContent = cmp || '—';
+  document.getElementById('s-act').textContent = act || '—';
+  document.getElementById('s-new').textContent = nw || '—';
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  const srch = document.getElementById('srch').value.toLowerCase();
+  const stf  = document.getElementById('stFil').value;
+  const srt  = document.getElementById('sortFil').value;
+
+  let list = [...clients];
+
+  if (srch) list = list.filter(c => (c.name||c.id).toLowerCase().includes(srch) || c.id.includes(srch));
+
+  if (stf) list = list.filter(c => {
+    const pct = c.done / REQ_TOTAL;
+    if (stf === 'complete') return pct >= 0.9;
+    if (stf === 'active')   return pct > 0 && pct < 0.9;
+    if (stf === 'new')      return c.done === 0;
+    return true;
+  });
+
+  list.sort((a,b) => {
+    if (srt === 'tasks')  return b.done - a.done;
+    if (srt === 'recent') return new Date(b.updatedAt||0) - new Date(a.updatedAt||0);
+    return (a.name||a.id).localeCompare(b.name||b.id);
+  });
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty"><h3>${clients.length?'No results':'No clients yet'}</h3><p>${clients.length?'Adjust your search or filter.':'Add your first client using the button above.'}</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(c => {
+    const dn = c.name || c.id.replace(/-/g,' ').replace(/\b\w/g,l=>l.toUpperCase());
+    const pct = Math.min(100, Math.round(c.done / REQ_TOTAL * 100));
+    const isCmp = pct >= 90, isAct = pct > 0 && pct < 90;
+    const stLabel = isCmp ? 'Complete' : isAct ? 'In Progress' : 'Not Started';
+    const stCls   = isCmp ? 'sb-complete' : isAct ? 'sb-active' : 'sb-new';
+    const barClr  = isCmp ? '#1A9E5C' : isAct ? '#0057FF' : '#9CA3AF';
+    const av = (dn||'??').split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const upd = c.updatedAt ? 'Updated ' + new Date(c.updatedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'No activity';
+    const secRows = SEC.map(s => {
+      const n = Object.keys(c.state).filter(k=>k.startsWith(s.prefix)).length;
+      return `<div class="sec-row"><div class="sec-dot" style="background:${s.color}"></div><span class="sec-n">${s.name}</span><span class="sec-c">${n}</span></div>`;
+    }).join('');
+    const shareUrl = `${CHECKLIST}?client=${encodeURIComponent(c.id)}`;
+
+    return `<div class="card">
+      <div class="card-head">
+        <div class="avatar">${av}</div>
+        <div class="card-info">
+          <div class="card-name">${dn}</div>
+          <div class="card-id">${c.id}${c.notes?' · '+c.notes:''}</div>
+        </div>
+        <span class="sbadge ${stCls}">${stLabel}</span>
+      </div>
+      <div class="card-body">
+        <div class="prog-row">
+          <span class="prog-lbl">Progress</span>
+          <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${barClr}"></div></div>
+          <span class="prog-pct">${c.done} tasks</span>
+        </div>
+        <div class="sec-grid">${secRows}</div>
+      </div>
+      <div class="card-foot">
+        <span class="upd-lbl">${upd}</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="note-btn" onclick="toggleNote('${c.id}')">📝 Notes${c.notes ? ' ●' : ''}</button>
+          <button class="copy-btn" onclick="copyLink('${c.id}')" title="Copy share link">⎘ Copy link</button>
+          <button class="open-btn" onclick="window.open('${shareUrl}','_blank')">Open →</button>
+          <button class="del-btn" onclick="deleteClient('${c.id}')" title="Delete client">🗑</button>
+        </div>
+      </div>
+      <div class="note-panel" id="note-${c.id}">
+        ${c.notes
+          ? `<div class="note-preview" id="note-preview-${c.id}">${c.notes}</div>
+             <div class="note-actions"><button class="note-cancel" onclick="editNote('${c.id}')">Edit</button></div>`
+          : `<textarea class="note-area" id="note-ta-${c.id}" placeholder="Add a note about this client…">${c.notes||''}</textarea>
+             <div class="note-actions">
+               <button class="note-cancel" onclick="toggleNote('${c.id}')">Cancel</button>
+               <button class="note-save" onclick="saveNote('${c.id}')">Save</button>
+             </div>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function copyLink(id) {
+  const url = `${CHECKLIST}?client=${encodeURIComponent(id)}`;
+  navigator.clipboard.writeText(url).catch(()=>{});
+}
+
+function toggleNote(id) {
+  const panel = document.getElementById('note-' + id);
+  if (!panel) return;
+  panel.classList.toggle('open');
+}
+
+function editNote(id) {
+  const c = clients.find(c => c.id === id);
+  const panel = document.getElementById('note-' + id);
+  panel.innerHTML = `<textarea class="note-area" id="note-ta-${id}" placeholder="Add a note about this client…">${c.notes||''}</textarea>
+    <div class="note-actions">
+      <button class="note-cancel" onclick="cancelNote('${id}')">Cancel</button>
+      <button class="note-save" onclick="saveNote('${id}')">Save</button>
+    </div>`;
+  setTimeout(() => document.getElementById('note-ta-' + id)?.focus(), 50);
+}
+
+function cancelNote(id) {
+  const c = clients.find(c => c.id === id);
+  const panel = document.getElementById('note-' + id);
+  if (c.notes) {
+    panel.innerHTML = `<div class="note-preview" id="note-preview-${id}">${c.notes}</div>
+      <div class="note-actions"><button class="note-cancel" onclick="editNote('${id}')">Edit</button></div>`;
+  } else {
+    panel.classList.remove('open');
+    panel.innerHTML = `<textarea class="note-area" id="note-ta-${id}" placeholder="Add a note about this client…"></textarea>
+      <div class="note-actions">
+        <button class="note-cancel" onclick="toggleNote('${id}')">Cancel</button>
+        <button class="note-save" onclick="saveNote('${id}')">Save</button>
+      </div>`;
+  }
+}
+
+async function saveNote(id) {
+  const ta = document.getElementById('note-ta-' + id);
+  if (!ta) return;
+  const note = ta.value.trim();
+  const c = clients.find(c => c.id === id);
+  if (!c) return;
+  const saveBtn = ta.closest('.note-panel').querySelector('.note-save');
+  if (saveBtn) { saveBtn.textContent = 'Saving…'; saveBtn.disabled = true; }
+  try {
+    const res = await fetch(SUPA+'/rest/v1/checklist_meta', {
+      method:'POST', headers:{...H,'Prefer':'resolution=merge-duplicates'},
+      body: JSON.stringify({client_id:id, name:c.name||'', notes:note, created_at:new Date().toISOString()})
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || res.status);
+    }
+    c.notes = note;
+    const btn = document.querySelector(`button[onclick="toggleNote('${id}')"]`);
+    if (btn) btn.textContent = `📝 Notes${note ? ' ●' : ''}`;
+    const panel = document.getElementById('note-' + id);
+    if (note) {
+      panel.innerHTML = `<div class="note-preview" id="note-preview-${id}">${note}</div>
+        <div class="note-actions"><button class="note-cancel" onclick="editNote('${id}')">Edit</button></div>`;
+    } else {
+      panel.classList.remove('open');
+      panel.innerHTML = `<textarea class="note-area" id="note-ta-${id}" placeholder="Add a note about this client…"></textarea>
+        <div class="note-actions">
+          <button class="note-cancel" onclick="toggleNote('${id}')">Cancel</button>
+          <button class="note-save" onclick="saveNote('${id}')">Save</button>
+        </div>`;
+    }
+  } catch(e) {
+    if (saveBtn) { saveBtn.textContent = 'Save'; saveBtn.disabled = false; }
+    alert('Error saving note: ' + e.message);
+  }
+}
+
+async function deleteClient(id) {
+  if (!confirm(`Delete "${id}" and all their checklist progress? This cannot be undone.`)) return;
+  try {
+    await fetch(SUPA+`/rest/v1/checklist_progress?client_id=eq.${encodeURIComponent(id)}`, {
+      method:'DELETE', headers: H
+    });
+    await fetch(SUPA+`/rest/v1/checklist_meta?client_id=eq.${encodeURIComponent(id)}`, {
+      method:'DELETE', headers: H
+    }).catch(()=>{});
+    clients = clients.filter(c => c.id !== id);
+    updateStats();
+    render();
+  } catch(e) { alert('Error deleting client.'); }
+}
+function openModal() {
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('m-id').focus(),50);
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  ['m-id','m-name','m-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('m-hint').textContent='';
+}
+function updateHint() {
+  const v = document.getElementById('m-id').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-');
+  document.getElementById('m-hint').textContent = v ? `${CHECKLIST}?client=${v}` : '';
+}
+async function addClient() {
+  const id = document.getElementById('m-id').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-');
+  const name = document.getElementById('m-name').value.trim();
+  const notes = document.getElementById('m-notes').value.trim();
+  if (!id) { alert('Client ID is required.'); return; }
+  try {
+    await fetch(SUPA+'/rest/v1/checklist_progress', {
+      method:'POST', headers:{...H,'Prefer':'resolution=ignore-duplicates'},
+      body: JSON.stringify({client_id:id, state:{}, updated_at:new Date().toISOString()})
+    });
+    // Try to upsert meta (table may not exist yet — fail silently)
+    await fetch(SUPA+'/rest/v1/checklist_meta', {
+      method:'POST', headers:{...H,'Prefer':'resolution=merge-duplicates'},
+      body: JSON.stringify({client_id:id, name, notes, created_at:new Date().toISOString()})
+    }).catch(()=>{});
+    closeModal();
+    await loadAll();
+  } catch(e) { alert('Error adding client. Check your Supabase connection.'); }
+}
+
+document.getElementById('overlay').addEventListener('click', e=>{
+  if(e.target===document.getElementById('overlay')) closeModal();
+});
+document.getElementById('m-id').addEventListener('keydown', e=>{
+  if(e.key==='Enter') addClient();
+});
+
+loadAll();
+setInterval(loadAll, 60000);
+</script>
+</body>
+</html>
