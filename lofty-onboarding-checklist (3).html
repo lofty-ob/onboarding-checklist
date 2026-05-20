@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lofty Onboarding Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:#0057FF; --blue-light:#E8F0FF;
+    --green:#1A9E5C; --green-light:#E6F7EF;
+    --amber:#D97706; --amber-light:#FEF3C7;
+    --purple:#7C3AED; --purple-light:#F3E8FF;
+    --surf:#fff; --surf2:#F7F8FA; --surf3:#EEF0F4;
+    --t1:#0D1117; --t2:#4B5563; --t3:#9CA3AF; --border:#E5E7EB;
+    --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;background:var(--surf2);color:var(--t1);min-height:100vh}
+
+  /* HEADER */
+  .hdr{background:var(--surf);border-bottom:1px solid var(--border);padding:16px 28px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo-icon{width:34px;height:34px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .logo-icon svg{fill:white;width:18px;height:18px}
+  .logo-text{font-size:16px;font-weight:600;letter-spacing:-.3px}
+  .logo-text span{color:var(--blue)}
+  .hdr-r{display:flex;align-items:center;gap:12px}
+  .save-row{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);font-family:'DM Mono',monospace}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--green);transition:background .3s}
+  .pct-badge{font-size:12px;font-weight:500;padding:5px 14px;background:var(--blue-light);color:var(--blue);border-radius:20px;white-space:nowrap}
+
+  .main{max-width:1000px;margin:0 auto;padding:28px 20px 80px}
+
+  /* HERO */
+  .hero{background:var(--blue);border-radius:16px;padding:28px 30px;color:white;margin-bottom:24px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.05)}
+  .hero::after{content:'';position:absolute;right:40px;bottom:-80px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.04)}
+  .hero h1{font-size:22px;font-weight:600;letter-spacing:-.4px;margin-bottom:6px;position:relative}
+  .hero p{font-size:13px;opacity:.82;line-height:1.6;max-width:500px;position:relative}
+  .hero-prog{display:flex;align-items:center;gap:14px;margin-top:20px;position:relative}
+  .prog-track{flex:1;height:6px;background:rgba(255,255,255,.22);border-radius:3px;overflow:hidden}
+  .prog-fill{height:100%;background:white;border-radius:3px;transition:width .6s ease}
+  .prog-pct{font-size:14px;font-weight:600;min-width:36px;text-align:right}
+  .prog-steps{font-size:12px;opacity:.7;margin-top:8px;position:relative}
+
+  .cel{display:none;background:var(--green-light);border:1px solid var(--green);color:var(--green);border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:14px;font-weight:500;text-align:center}
+
+  /* SECTION */
+  .sec{border-radius:14px;border:1px solid var(--border);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
+  .sh{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;user-select:none;transition:background .1s}
+  .sh:hover{filter:brightness(0.97)}
+  .si{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  .st{flex:1;min-width:0}
+  .sn{font-size:14px;font-weight:600;letter-spacing:-.2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .cbadge{font-size:11px;color:var(--green);font-weight:500;background:var(--green-light);padding:2px 8px;border-radius:10px}
+  .ss{font-size:11px;color:var(--t3);margin-top:2px}
+  .sm{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .sc{font-size:12px;color:var(--t3);font-family:'DM Mono',monospace;white-space:nowrap}
+  .chev{color:var(--t3);transition:transform .25s;font-size:18px;line-height:1}
+  .sec.open .chev{transform:rotate(180deg)}
+  .sbar{height:3px;background:var(--surf3)}
+  .sbf{height:100%;transition:width .5s ease}
+  .sbody{display:none}
+  .sec.open .sbody{display:block}
+
+  /* SECTION-LEVEL INSTRUCTIONS */
+  .sec-instructions{font-size:12px;color:var(--t1);line-height:1.6;padding:12px 18px;background:var(--blue-light);border-bottom:1px solid var(--border)}
+
+  /* COLLAPSIBLE SUB-GROUP */
+  .sub-grp{border-top:1px solid var(--border)}
+  .sub-grp:first-child{border-top:none}
+  .sub-grp-hdr{display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;user-select:none;background:var(--surf2);transition:background .1s}
+  .sub-grp-hdr:hover{background:var(--surf3)}
+  .sub-grp-label{flex:1;font-size:13px;font-weight:600;color:var(--t1);letter-spacing:-.1px}
+  .sub-grp-ct{font-size:11px;color:var(--t3);font-family:'DM Mono',monospace}
+  .sub-grp-chev{color:var(--t3);font-size:14px;transition:transform .2s}
+  .sub-grp.open .sub-grp-chev{transform:rotate(180deg)}
+  .sub-grp-body{display:none}
+  .sub-grp.open .sub-grp-body{display:block}
+
+  /* GROUP LABEL — styled as a dark divider bar */
+  .grp-label:empty{display:none}
+  .grp-label{font-size:11px;font-weight:600;color:var(--surf);background:var(--t2);padding:8px 18px;border-top:1px solid var(--border)}
+  .grp-label:first-child{border-top:none}
+  .grp-sublabel{font-size:11px;font-weight:500;color:var(--amber-light);margin-top:3px;opacity:.9}
+  /* INSTRUCTIONS callout */
+  .grp-instructions{font-size:12px;color:var(--t1);line-height:1.6;padding:12px 18px;background:var(--blue-light);border-bottom:1px solid var(--border)}
+
+  /* SUBHEADING — regular bold heading inside a group, no checkbox */
+  .task-subheading{padding:16px 18px 5px;border-top:1px solid var(--border)}
+  .task-subheading:first-child{border-top:none}
+  .task-subheading-label{font-size:13px;font-weight:600;color:var(--t1)}
+  .task-subheading.warning-note{background:var(--amber-light);padding:12px 18px;border-left:3px solid var(--amber);border-top:1px solid var(--border)}
+  .task-subheading.warning-note .task-subheading-label{color:var(--amber);font-size:12px;font-weight:600}
+  .task-subheading.warning-note .task-subheading-desc{font-size:12px;color:#92400E;margin-top:4px;line-height:1.5}
+
+  /* TASK */
+  .task{display:flex;align-items:flex-start;gap:13px;padding:12px 18px;border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .task:last-child{border-bottom:none}
+  .task:hover{background:var(--surf2)}
+  .task.done{opacity:.5}
+  .task.training-task{background:linear-gradient(to right, #FFFBEB, var(--surf));border-left:3px solid var(--amber)}
+  .task.training-task:hover{background:linear-gradient(to right, #FEF3C7, var(--surf2))}
+  .task.training-task .tn{color:var(--amber)}
+  .cb{width:20px;height:20px;border-radius:5px;border:2px solid #CBD5E1;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .18s;background:var(--surf)}
+  .task.done .cb{background:var(--green);border-color:var(--green)}
+  .ck{display:none}
+  .task.done .ck{display:block}
+  .tb{flex:1;min-width:0}
+  .tn{font-size:13px;font-weight:500;line-height:1.4}
+  .task.done .tn{text-decoration:line-through;color:var(--t3)}
+  .td{font-size:12px;color:var(--t2);margin-top:3px;line-height:1.5}
+  .tl{font-size:11px;color:var(--blue);margin-top:4px;display:inline-flex;align-items:center;gap:3px;text-decoration:none;font-weight:500}
+  .tl:hover{text-decoration:underline}
+  .ds{font-size:10px;color:var(--green);font-family:'DM Mono',monospace;margin-top:3px}
+  .tag{font-size:10px;font-family:'DM Mono',monospace;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:3px;line-height:1.4}
+  .tag-req{background:#FEE2E2;color:#B91C1C}
+  .tag-rec{background:#FEF9C3;color:#854D0E}
+  .tag-opt{background:var(--surf3);color:var(--t2)}
+  .tag-ai{background:var(--purple-light);color:var(--purple)}
+  .tag-training{background:var(--amber-light);color:var(--amber)}
+
+  .client-badge{font-size:11px;font-family:'DM Mono',monospace;padding:4px 10px;background:var(--surf2);border:1px solid var(--border);border-radius:6px;color:var(--t2);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .share-btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surf);color:var(--t1);cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .1s}
+  .share-btn:hover{background:var(--surf2)}
+  .share-btn.copied{background:var(--green-light);border-color:var(--green);color:var(--green)}
+  .setup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:300;align-items:center;justify-content:center}
+  .setup-overlay.open{display:flex}
+  .setup-modal{background:var(--surf);border-radius:16px;padding:28px 32px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,0.15)}
+  .setup-modal h3{font-size:18px;font-weight:600;margin-bottom:8px}
+  .setup-modal p{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:20px}
+  .setup-input{font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;width:100%;outline:none;transition:border-color .15s;margin-bottom:8px}
+  .setup-input:focus{border-color:var(--blue)}
+  .setup-hint{font-size:11px;color:var(--t3);margin-bottom:20px}
+  .setup-footer{display:flex;justify-content:flex-end;gap:10px}
+  .btn-primary{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:9px 20px;background:var(--blue);color:white;border:none;border-radius:8px;cursor:pointer}
+  .btn-primary:hover{background:#0049D6}
+
+  .filter-bar{display:flex;align-items:center;gap:6px;padding:12px 20px;background:var(--surf);border-bottom:1px solid var(--border);flex-wrap:wrap}
+  .filter-label{font-size:12px;color:var(--t3);font-weight:500;margin-right:2px}
+  .filter-btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surf);color:var(--t2);cursor:pointer;transition:all .15s}
+  .filter-btn:hover{background:var(--surf2);border-color:var(--blue);color:var(--blue)}
+  .filter-btn.active{background:var(--blue);border-color:var(--blue);color:white}
+
+  @media(max-width:600px){
+    .hdr{padding:14px 16px}
+    .main{padding:18px 14px 60px}
+    .hero{padding:22px 20px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo">
+    <div class="logo-text"><span>Lofty</span> Onboarding</div>
+  </div>
+  <div class="hdr-r">
+    <div class="save-row"><div class="dot" id="saveDot"></div><span id="saveText">Loading…</span></div>
+    <div class="client-badge" id="clientBadge" style="display:none"></div>
+    <button class="share-btn" id="shareBtn" onclick="copyShareLink()" style="display:none">🔗 Share</button>
+    <div class="pct-badge" id="hdrPct">0% complete</div>
+  </div>
+</div>
+
+<div class="setup-overlay" id="setupOverlay">
+  <div class="setup-modal">
+    <h3>Get your Lofty Checklist</h3>
+    <p>This identifies the checklist for your company — use it to access and track your onboarding progress. Your Lofty onboarding specialist will use this same ID to monitor your setup.</p>
+    <input class="setup-input" id="setupInput" type="text" placeholder="e.g. Smith Real Estate Group" maxlength="50"/>
+    <div class="setup-hint">Use lowercase letters and hyphens only. This becomes part of the shared link.</div>
+    <div class="setup-footer">
+      <button class="btn-primary" onclick="applyClientId()">Create checklist →</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="cel" id="cel">🎉 You're all set! Every step is complete — your Lofty account is fully configured and ready to go.</div>
+  <div class="hero">
+    <h1>Enterprise Onboarding Checklist</h1>
+    <p>This checklist is a resource to help guide you through your Lofty setup. You'll have scheduled meetings with your onboarding specialist along the way, and training videos are linked throughout. Look for the <strong style="color:rgba(255,255,255,0.95)">Get Ahead!</strong> sections to watch them before each stage and make the most of your time.</p>
+    <div style="display:flex;gap:20px;margin-top:18px;position:relative">
+      <div style="flex:1">
+        <div style="font-size:10px;opacity:.65;margin-bottom:4px;letter-spacing:.3px;text-transform:uppercase">Required</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="flex:1;height:4px;background:rgba(255,255,255,.22);border-radius:2px;overflow:hidden"><div style="height:100%;background:white;border-radius:2px;transition:width .5s" id="pf"></div></div>
+          <span style="font-size:12px;font-weight:600;min-width:28px;text-align:right" id="pp">0%</span>
+        </div>
+        <div style="font-size:10px;opacity:.6;margin-top:3px" id="progSteps">0 of 0 done</div>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:10px;opacity:.65;margin-bottom:4px;letter-spacing:.3px;text-transform:uppercase">Recommended</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="flex:1;height:4px;background:rgba(255,255,255,.22);border-radius:2px;overflow:hidden"><div style="height:100%;background:rgba(255,255,255,.5);border-radius:2px;transition:width .5s" id="pfOpt"></div></div>
+          <span style="font-size:12px;font-weight:600;min-width:28px;text-align:right;opacity:.8" id="ppOpt">0%</span>
+        </div>
+        <div style="font-size:10px;opacity:.6;margin-top:3px" id="progStepsOpt">0 of 0 recommended done</div>
+      </div>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <span class="filter-label">Show:</span>
+    <button class="filter-btn active" onclick="setFilter('all')" id="f-all">All</button>
+    <button class="filter-btn" onclick="setFilter('incomplete')" id="f-incomplete">Incomplete</button>
+    <button class="filter-btn" onclick="setFilter('complete')" id="f-complete">Complete</button>
+    <button class="filter-btn" onclick="setFilter('required')" id="f-required">Required</button>
+    <button class="filter-btn" onclick="setFilter('recommended')" id="f-recommended">Recommended</button>
+    <button class="filter-btn" onclick="setFilter('training')" id="f-training">Training</button>
+  </div>
+  <div id="checklist"></div>
+</div>
+
+<script>
+const SECTIONS = [
+  {
+    id:"gs", icon:"🚀", color:"#E8F0FF", bar:"#0057FF",
+    title:"Getting Started With Lofty", sub:"Login, guided profile & website setup",
+    groups:[
+      {
+        label:"Login",
+        tasks:[
+          {id:"gs-m1", name:"Log in to your Lofty account", desc:"Visit lofty.com and log in with your credentials. If you don't remember your login or can't find it, use the Forgot Password option on lofty.com to reset access.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/217091086-Log-In-to-your-Chime-Account", ll:"Log-in guide"},
+        ]
+      },
+      {
+        label:"Start Here",
+        instructions:"When you first log in, Lofty will walk you through a Guided Setup to get your profile and website configured. This is the first thing you will complete — it unlocks the rest of the platform. Watch the video below to understand what to expect before you begin.",
+        tasks:[
+          {id:"gs-start-video", name:"Watch: Guided Setup walkthrough", desc:"A quick overview of the Lofty Guided Setup — what it covers, what to expect and how it sets up your account for success.", tag:"training", link:"https://www.loom.com/share/c53e9c029ce640989e2702f8a4512eb1", ll:"Watch Loom recording"},
+        ]
+      },
+      {
+        label:"Profile & Website Guided Setup",
+        sublabel:"Complete these steps first — they unlock the rest of your CRM and setup process",
+        tasks:[
+          {id:"gs-gp-head", name:"Guided Setup: Profile", subheading:true},
+          {id:"gs-gp1", name:"Business Profile", desc:"Complete your business profile by providing the business name and logo you use to promote and run your business.", tag:"req"},
+          {id:"gs-gp2", name:"Marketing Profile", desc:"Select your position within your business and upload a headshot image that will be used to build your marketing profile.", tag:"req"},
+          {id:"gs-gp3", name:"Social Media Connections", desc:"Link your social media accounts to Lofty to harness social posting features within the platform.", tag:"rec"},
+          {id:"gs-gw-head", name:"Guided Setup: Website", subheading:true},
+          {id:"gs-gw1", name:"Choose a Website Template", desc:"Select a website template that will be used to populate your website. You can edit designs and content at any point in the future.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/10486049285659-Website-Template-Library", ll:"Template library"},
+          {id:"gs-gw2", name:"Provide Website Domain", desc:"Provide the website domain you use for your real estate business — the one you want connected to your Lofty platform. This information will be used to submit MLS applications. You will be prompted later to configure the domain at the right time.", tag:"req"},
+          {id:"gs-gw3", name:"Connect MLS(s)", desc:"Select and connect the MLS board(s) for your market. Lofty will submit your IDX application on your behalf — approval typically takes 3–5 business days. Once approved your listings feed will activate and sync automatically.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360046997872-MLS-FAQs", ll:"MLS FAQs"},
+          {id:"gs-gw-domain-note", name:"⚠️ Domain Configuration", desc:"Do not configure your domain DNS until the very end of onboarding or until your Lofty onboarding specialist confirms you are ready. Configuring DNS too early can cause your website to go live before setup is complete. This step will be completed as part of Going Live.", subheading:true},
+        ]
+      },
+      {
+        label:"Get Ahead!",
+        tasks:[
+          {id:"gs-t1", name:"Extra Training Opportunity: Lofty CRM", desc:"Watch this overview of the main dashboard. Note: this is recorded from the main dashboard after completing profile and website setup in guided setup — choose \"Explore Lofty\" in the top right to access this view.", tag:"training", link:"https://www.loom.com/share/f4a9ec918d0f41929f54329246dd7912", ll:"Watch Loom recording"},
+          {id:"gs-csv-note", name:"⚠️ Start organizing your lead import file now", desc:"Don't wait until Going Live to prepare your contact database. Download Lofty's sample CSV file today and begin formatting your leads right away — having a clean, organized file ready will make the lead import step seamless when you go live. We've added the sample file link below for easy access. Note: the actual import will take place during the Going Live section — please confirm with your Lofty onboarding team before importing to ensure everything is set up correctly.", subheading:true},
+          {id:"gs-csv-dl", name:"Download sample lead import file", desc:"Use this template to format your existing contact database correctly before importing into Lofty. Start filling it in as early as possible.", tag:"rec", link:"https://help.chime.me/hc/en-us/article_attachments/360047582072/Sample_File.csv", ll:"Download sample file"},
+        ]
+      },
+    ]
+  },
+  {
+    id:"settings", icon:"⚙️", color:"#EEF0F4", bar:"#4B5563",
+    title:"Settings", sub:"Personal and company configuration",
+    instructions:"Press the Explore Lofty button in the top right of your guided setup to access your Lofty Dashboard. Then press the ⚙️ gear icon on the far right to access your Settings. From there you can navigate between Personal and Company settings depending on what you want to edit.",
+    groups:[
+      {
+        label:"Get Ahead!",
+        tasks:[
+          {id:"gs-t2", name:"Extra Training Opportunity: Lofty Settings", desc:"Watch this walkthrough of the Lofty settings area — covers both personal and company settings so you know exactly where everything lives.", tag:"training", link:"https://www.loom.com/share/67b47589778843dc93ca44498047fdc2", ll:"Watch Loom recording"},
+        ]
+      },
+      {
+        label:"Personal Settings",
+        collapsible:true,
+        tasks:[
+          {id:"gs-a1", name:"Profile", desc:"Complete your personal profile — name, contact info, headshot, bio and email signature. This appears on your CRM profile and website.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/218007123-Complete-your-Chime-Profile-Email-Signature", ll:"Profile & signature guide"},
+          {id:"gs-int1", name:"Integrate Calendar", desc:"Connect your Google or Outlook calendar for two-way sync — meetings booked in Lofty appear on your calendar and vice versa.", tag:"req", link:"https://help.chime.me/hc/en-us/sections/115000576843-Integrations", ll:"Calendar integration guide"},
+          {id:"gs-int2", name:"Integrate Email", desc:"Link your Gmail or Outlook inbox so all email communication with leads syncs directly into the Lofty CRM.", tag:"req", link:"https://help.chime.me/hc/en-us/sections/115000576843-Integrations", ll:"Email integration guide"},
+          {id:"gs-a11", name:"Add Lender", desc:"Invite a preferred lending partner to your account. Lenders can co-brand with you, view shared leads and collaborate on client communications directly within Lofty.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/115003080672-How-to-Invite-a-Lender", ll:"Invite a lender"},
+          {id:"gs-a5", name:"Vendor / Partner", desc:"Add your preferred vendors and partners to your personal profile — lenders, inspectors, title companies and other referral partners.", tag:"rec"},
+          {id:"gs-a6", name:"Personal Goal Setting", desc:"Set your individual transaction and revenue goals. These feed into your personal performance dashboard and business summary reporting.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360038030552-Business-Summary-Reporting-", ll:"Goal setting guide"},
+          {id:"gs-a9", name:"Install Lofty CRM app on your phone and log in", desc:"iOS and Android app for managing leads on the go.", tag:"rec"},
+          {id:"gs-sub-comm-personal", name:"Communication", subheading:true},
+          {id:"gs-cp1b", name:"Get Ahead! Extra Training Opportunity: Call & Text", desc:"Watch this walkthrough of the call and text settings to get a head start on configuring your outbound communication tools.", tag:"training", link:"https://www.loom.com/share/b11891c578bb40c4b2dc86c7635583b3", ll:"Watch Loom recording"},
+          {id:"gs-cp1", name:"Call & Text Settings", desc:"Configure your personal call and text settings — set up your dialer, assign call/text credits and review your settings for outbound lead communication.", tag:"req", link:"https://help.lofty.com/hc/en-us/articles/360000306652-Call-Text-Package-Settings", ll:"Call & text guide"},
+          {id:"gs-cp2", name:"Text Templates", desc:"Set up personal SMS templates for quick, consistent lead follow-up and outreach.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/4402878822285-Text-Templates", ll:"Text templates guide"},
+          {id:"gs-cp3", name:"Email Signature", desc:"Create your personal email signature that will appear on all outgoing CRM emails sent from your account.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/218007123-Complete-your-Chime-Profile-Email-Signature", ll:"Email signature guide"},
+          {id:"gs-cp4", name:"Email Templates", desc:"Review and customize personal email templates for lead follow-up, introductions and nurture sequences.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360055290611-Email-Templates", ll:"Email templates guide"},
+          {id:"gs-sub-leads", name:"Lead Settings", subheading:true},
+          {id:"gs-ls1", name:"Lead Capture", desc:"Configure your personal lead capture settings — set up email parsing and auto-import rules so inbound leads from your sources route directly into Lofty.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/115003438011-Lead-Capture-Email-Parsing", ll:"Lead capture guide"},
+        ]
+      },
+      {
+        label:"Company Settings",
+        collapsible:true,
+        tasks:[
+          {id:"gs-b3-note", name:"⚠️ Users — Add & Import Agents", desc:"Do not invite agents or import your agent roster until your onboarding setup is fully complete and agents are ready to log in. Sending invitations too early may cause confusion before the platform is configured. This step will be completed as part of Going Live.", subheading:true},
+          {id:"gs-b6", name:"Agent Tags", desc:"Create custom tags to categorize and filter agents by specialty, market area, team or any other criteria that fits your organization.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/10336991021979-Agent-Tags", ll:"Agent tags guide"},
+          {id:"gs-b9", name:"Agent Roles", desc:"Define and assign roles to your agents — such as buyer's agent, listing agent, team lead or admin — to control permissions, reporting visibility and lead assignment behavior within your organization.", tag:"rec"},
+          {id:"gs-b1", name:"Organization Hierarchy", desc:"Add-on feature — not included in all accounts. If your account includes enterprise org hierarchy, configure your team structure, sub-teams and reporting lines here. If this is not part of your account feel free to mark complete.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/4407349639067-Enterprise-Organization-and-Hierarchy-Overview", ll:"Hierarchy overview"},
+          {id:"gs-b2", name:"Permission Profiles", desc:"Create and assign role-based permission profiles for admins, team leads and agents. Control what each role can see, edit and manage within the platform.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/4407530443291-Enterprise-Permissions", ll:"Permissions guide"},
+          {id:"gs-b7", name:"Vendor / Partner", desc:"Add company-wide preferred vendors and partners — lenders, inspectors, title companies and other referral partners visible to the whole team.", tag:"rec"},
+          {id:"gs-b8", name:"Company Goal Setting", desc:"Define company-wide transaction and revenue targets. These feed into your team performance dashboard and business summary reporting.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360038030552-Business-Summary-Reporting-", ll:"Goal setting guide"},
+          {id:"gs-sub-acct", name:"Account Settings", subheading:true},
+          {id:"gs-ac1", name:"White Label", desc:"Configure white label settings to brand the Lofty platform with your company name, logo and colors — creating a seamless branded experience for your agents and clients.", tag:"req", link:"https://help.lofty.com/hc/en-us/articles/5584384821275-White-Label", ll:"White label guide"},
+          {id:"gs-ac2", name:"SSO Settings", desc:"Set up Single Sign-On (SSO) to allow your agents to log in to Lofty using your company's existing identity provider (e.g. Google Workspace, Microsoft Azure AD).", tag:"rec", link:"https://help.lofty.com/hc/en-us/articles/10385541670427-Single-Sign-On-SSO-Configuration", ll:"SSO configuration guide"},
+          {id:"gs-sub-comm-company", name:"Communication", subheading:true},
+          {id:"gs-cc1", name:"Call & Text — Company Number Setup", desc:"Configure the company-wide phone number and unknown caller routing rule used across your team.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360059630312-Company-Number", ll:"Company number guide"},
+          {id:"gs-cc2", name:"Text Templates", desc:"Build company-wide SMS templates your agents can use for consistent lead communication across the team.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/4402878822285-Text-Templates", ll:"Text templates guide"},
+          {id:"gs-cc3", name:"Email Templates", desc:"Set up and standardize company-wide email templates for lead follow-up, welcome messages and drip campaigns.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360055290611-Email-Templates", ll:"Email templates guide"},
+          {id:"gs-sub-leads-co", name:"Lead Settings", subheading:true},
+          {id:"gs-col1", name:"Lead Capture", desc:"Configure company-wide lead capture settings — set up email parsing and auto-import rules so inbound leads from all sources route directly into Lofty.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/115003438011-Lead-Capture-Email-Parsing", ll:"Lead capture guide"},
+          {id:"gs-col2b", name:"Get Ahead! Extra Training Opportunity: Lead Routing", desc:"Watch this walkthrough of lead routing setup to get a head start on configuring how leads are distributed across your team.", tag:"training", link:"https://www.loom.com/share/274047282df0443e951ea9ac9a6fbf9b?sid=83afed9a-d060-4735-8826-df711db08702", ll:"Watch Loom recording"},
+          {id:"gs-col2", name:"Lead Routing", desc:"Define company-wide routing rules to automatically assign new leads to agents based on source, location, lead type or round-robin distribution.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360055177831-Lead-Routing-Rules", ll:"Lead routing guide"},
+          {id:"gs-col4", name:"Reassignment Groups", desc:"Set up reassignment groups to automatically redistribute leads when an agent is unavailable, inactive or removed — ensuring no lead goes uncontacted.", tag:"rec", link:"https://help.lofty.com/hc/en-us/articles/360061564771-Reassignment-Groups", ll:"Reassignment groups guide"},
+          {id:"gs-col5", name:"Lead Pond", desc:"Configure a shared lead pond — a pool of unassigned or recycled leads that agents can claim. Useful for overflow leads or re-engagement campaigns.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360038382872-Lead-Pond", ll:"Lead pond guide"},
+          {id:"gs-col7", name:"Custom Fields", desc:"Create custom contact fields to capture information specific to your business — additional property preferences, transaction details or any data your team tracks.", tag:"rec"},
+        ]
+      },
+    ]
+  },
+  {
+    id:"ws", icon:"🌐", color:"#FEF3C7", bar:"#D97706",
+    title:"IDX Website", sub:"Listings, website setup and design",
+    instructions:"To access your website editor, go to the Content tab in your Lofty dashboard, then choose Websites and click on the website you want to edit. Note: only full websites (such as your company website) will have access to these editing tools.",
+    groups:[
+      {
+        label:"Get Ahead!",
+        tasks:[
+          {id:"ws-t1", name:"Get Ahead! Extra Training Opportunity: Lofty IDX Website", desc:"Watch this walkthrough of the Lofty IDX website setup before your training session to get a head start on configuration.", tag:"training", link:"https://www.loom.com/share/e178b064f9a945169023353ac4ca2451?sid=863c3002-e193-4a66-84a0-470fa1dae766", ll:"Watch Loom recording"},
+        ]
+      },
+      {
+        label:"Settings",
+        collapsible:true,
+        tasks:[
+          {id:"ws-b1", name:"Add your favicon", desc:"Upload your brand icon (16×16 or 32×32 PNG/ICO) for browser tabs.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360038005432-How-to-customize-website-favicon-", ll:"Favicon guide"},
+          {id:"ws-b2", name:"Set country (Canada or USA)", desc:"Determines MLS data display rules and currency formatting.", tag:"req"},
+          {id:"ws-b3", name:"Import agents from the CRM", desc:"Pull your CRM agent roster onto the website team page.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360061570451-Website-Team-Info", ll:"Team info guide"},
+          {id:"ws-b5", name:"Add vendors", desc:"Feature preferred vendors (lenders, inspectors, etc.) on your site.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/4402376306573-Vendor-Block", ll:"Vendor block guide"},
+          {id:"ws-a1", name:"Choose registration strategy", desc:"Decide when and how visitors are prompted to register.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360038373331-Registration-Pop-up-Trigger-Rule", ll:"Registration guide"},
+          {id:"ws-a2", name:"Configure registration pop-up style & settings", desc:"Customize pop-up design, timing and required fields.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360038373331-Registration-Pop-up-Trigger-Rule", ll:"Pop-up guide"},
+          {id:"ws-a3", name:"Questionnaire settings", desc:"Set buyer/seller questionnaire questions shown at registration.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360038005412-Questionnaire-Settings", ll:"Questionnaire guide"},
+          {id:"ws-a6", name:"Toggle Closely app download display on/off", desc:"Choose whether to show the app download prompt to visitors.", tag:"rec"},
+          {id:"ws-b7", name:"Integrate Google My Business account", desc:"Pull in reviews and map presence from your GMB listing.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/10484969684763-Google-My-Business-Integration", ll:"GMB integration guide"},
+        ]
+      },
+      {
+        label:"Listings",
+        collapsible:true,
+        tasks:[
+          {id:"gs-m7", name:"All MLS applications approved", desc:"Confirm all MLS feeds are active and syncing listings.", tag:"req"},
+        ]
+      },
+      {
+        label:"Blog",
+        collapsible:true,
+        tasks:[
+          {id:"ws-bl1", name:"Create your first blog post", desc:"Publish a market update, neighborhood guide or real estate tips article to start building organic search traffic.", tag:"rec"},
+        ]
+      },
+      {
+        label:"Areas",
+        collapsible:true,
+        tasks:[
+          {id:"ws-b6", name:"Add 5–10 featured areas", desc:"Highlight key neighborhoods or cities you serve.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360037923152-Featured-Areas-Block", ll:"Featured areas guide"},
+        ]
+      },
+      {
+        label:"Editor",
+        collapsible:true,
+        tasks:[
+          {id:"ws-d1", name:"Configure website theme", desc:"Choose color palette and visual style for your site.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360037814232-Changing-the-Website-Theme", ll:"Theme guide"},
+          {id:"ws-d3", name:"Choose or upload website fonts", desc:"Use standard fonts or upload custom brand fonts.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/5186887805083-Custom-Website-Fonts", ll:"Custom fonts guide"},
+          {id:"ws-d4", name:"Edit the website header", desc:"Logo placement, navigation links and header CTA.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360054747512-Header", ll:"Header guide"},
+          {id:"ws-d5", name:"Edit the website footer", desc:"Contact info, social links, disclaimer text.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360038293211-Footer", ll:"Footer guide"},
+          {id:"ws-d6", name:"Configure hero image/video", desc:"Set the main visual on your homepage above the fold.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360038293231-Hero-Block", ll:"Hero block guide"},
+          {id:"ws-d7", name:"Add featured areas to the homepage", desc:"Display neighborhood search blocks on the home page.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360037923152-Featured-Areas-Block", ll:"Featured areas guide"},
+          {id:"ws-d8", name:"Configure reviews from Google My Business", desc:"Showcase client reviews pulled from your GMB account.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360038293251-Reviews-Block", ll:"Reviews block guide"},
+          {id:"ws-d9", name:"Build the About Us page", desc:"Team story, mission and key bios for your brokerage.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360038509071-About-Page", ll:"About page guide"},
+          {id:"ws-d10", name:"Replace Lofty stock images with localized content", desc:"Swap generic images for photos of your actual market areas.", tag:"req"},
+        ]
+      },
+      {
+        label:"SEO",
+        collapsible:true,
+        tasks:[
+          {id:"ws-seo1", name:"Configure page titles and meta descriptions", desc:"Set SEO-friendly titles and descriptions for your homepage, area pages and listing pages to improve search engine visibility.", tag:"req"},
+          {id:"ws-seo2", name:"Complete SEO setup", desc:"Work through the full SEO setup in your Lofty website settings — including site name, description, social sharing images and other on-page SEO configurations.", tag:"req", link:"https://help.lofty.com/hc/en-us/articles/21967062975515-Search-Engine-Optimization-SEO-Tool", ll:"SEO setup guide"},
+          {id:"ws-seo3", name:"Complete SEO indexing", desc:"Submit your website to search engines for indexing so your pages begin appearing in search results. Follow the indexing steps in your Lofty SEO settings.", tag:"req", link:"https://help.lofty.com/hc/en-us/articles/21967062975515-Search-Engine-Optimization-SEO-Tool#h_01KRCS54TYPFA9VXEVQA2BED2Z", ll:"SEO indexing guide"},
+        ]
+      },
+    ]
+  },
+  {
+    id:"crm", icon:"🗂️", color:"#F3E8FF", bar:"#7C3AED",
+    title:"Lead Organization", sub:"Lead management, calendar and routing",
+    groups:[
+      {
+        label:"Lead Organization",
+        collapsible:true,
+        tasks:[
+          {id:"crm-ga1", name:"Get Ahead! Extra Training Opportunity: People Page", desc:"Watch this walkthrough of the Lofty People page to get a head start on navigating and managing your lead database.", tag:"training", link:"https://www.loom.com/share/b95fc23ff9bc4bd3bd1cf40ab3806bec?sid=530ecbb7-5796-4f4f-b5d1-ce7c2a4b6ee8", ll:"Watch Loom recording"},
+          {id:"crm-lo1", name:"Pipelines", desc:"Set up your lead pipeline stages before importing leads — pipeline stages cannot be easily changed after leads have been assigned to them. Pipelines can only be configured by a company admin.", tag:"req"},
+          {id:"crm-lo2", name:"Tags", desc:"Create lead tags to segment and organize your database. Note: tags can be configured at both the personal and company level — be sure to add them in the correct settings (Personal or Company) depending on who should have access.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360038603951-Lead-Organization-with-Tags", ll:"Tags guide"},
+          {id:"crm-lo3", name:"Sources", desc:"Define your lead sources so every contact is tagged by where they came from — website, Zillow, Facebook, referral and more. Sources can only be configured by a company admin.", tag:"rec"},
+          {id:"crm-lo4", name:"Segments", desc:"Build lead segments to group contacts by shared criteria for targeted follow-up and reporting. Segments can only be configured by a company admin.", tag:"rec"},
+          {id:"ld-o4", name:"Sample Lead Import File", desc:"Download Lofty's sample CSV file and begin organizing your existing contact database into the correct format right away. Having your import file ready before Going Live will make the lead import step seamless.", tag:"req", link:"https://help.chime.me/hc/en-us/article_attachments/360047582072/Sample_File.csv", ll:"Download sample file"},
+          {id:"ld-o4-note", name:"⚠️ Start organizing your import file now", desc:"Do not wait until Going Live to prepare your lead import file. Begin formatting and cleaning your contact database as early as possible so it is ready to upload the moment you go live. A well-prepared file prevents delays and ensures your leads are correctly assigned and organized from day one. The actual import will take place during the Going Live section — please confirm with your Lofty onboarding team before running your import to ensure everything is configured correctly.", subheading:true},
+        ]
+      },
+      {
+        label:"Calendar Settings",
+        collapsible:true,
+        tasks:[
+          {id:"crm-cal1", name:"Set calendar privacy", desc:"Configure who can see your calendar availability and appointment details within Lofty.", tag:"rec"},
+          {id:"crm-cal2", name:"Set working hours", desc:"Define your available hours so leads and agents can only book appointments during your designated working times.", tag:"rec"},
+          {id:"crm-cal3", name:"Calendar notification options", desc:"Choose how and when you receive reminders for upcoming appointments and scheduled tasks.", tag:"rec"},
+          {id:"crm-cal4", name:"Scheduling link", desc:"Set up your personal scheduling link so leads and clients can book time directly on your calendar.", tag:"rec"},
+        ]
+      },
+      {
+        label:"Lead Routing",
+        collapsible:true,
+        tasks:[
+          {id:"crm-lr-ga", name:"Get Ahead! Extra Training Opportunity: Lead Routing", desc:"Watch this walkthrough of lead routing setup to get a head start on configuring how leads are distributed across your team.", tag:"training", link:"https://www.loom.com/share/274047282df0443e951ea9ac9a6fbf9b?sid=83afed9a-d060-4735-8826-df711db08702", ll:"Watch Loom recording"},
+          {id:"crm-i3", name:"Set up lead routing rules", desc:"Define how new leads are automatically assigned to agents.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360055177831-Lead-Routing-Rules", ll:"Routing rules guide"},
+          {id:"crm-i7", name:"Review agent assignment groups", desc:"Assignment Groups allow teammates in the Lofty CRM to collaborate on lead follow-up. When a new lead enters the system, the lead is simultaneously assigned to an agent and their working partners — ensuring no lead falls through the cracks.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/11055755929499-Assignment-Group", ll:"Assignment groups guide"},
+        ]
+      },
+    ]
+  },
+  {
+    id:"automation", icon:"⚡", color:"#EDE9FE", bar:"#6D28D9",
+    title:"Automation", sub:"Smart plans and AI assistant configuration",
+    groups:[
+      {
+        label:"Smart Plans",
+        collapsible:true,
+        tasks:[
+          {id:"sp-ga1", name:"Get Ahead! Extra Training Opportunity: Smart Plans", desc:"Watch this walkthrough of Lofty Smart Plans to get a head start on understanding how automated follow-up sequences work before building your own.", tag:"training", link:"https://www.loom.com/share/a22d8ca5798048b6bc2f8cd541f0ae11", ll:"Watch Loom recording"},
+          {id:"crm-i5", name:"Import 2 smart plans from Lofty library", desc:"Add default follow-up sequences to your smart plan library.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/7626737520923-Managing-Smart-Plans", ll:"Smart plan library"},
+          {id:"crm-a4", name:"Create 1 manual smart plan", desc:"Build a custom follow-up sequence tailored to your process.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/7626737520923-Managing-Smart-Plans", ll:"Managing smart plans"},
+        ]
+      },
+      {
+        label:"AI",
+        collapsible:true,
+        instructions:"⚠️ AI agents are add-on features and may not be fully available on your current plan. If you do not have the AI add-on, you will have limited access to these tools and will not be able to use them at full capacity. However, if you plan to use AI agents in the future, completing the setup now ensures everything is ready when your access is activated.",
+        tasks:[
+          {id:"ai-sales-head", name:"Sales Agent", subheading:true},
+          {id:"ai-sales1", name:"Set up Sales Agent", desc:"Configure your AI Sales Agent to follow up with new leads automatically — sending personalized messages, answering questions and keeping prospects engaged until they're ready to connect with an agent.", tag:"rec", link:"https://help.lofty.com/hc/en-us/articles/39659584983067-Getting-Started-with-AI-Sales-Agent", ll:"AI Sales Agent guide"},
+          {id:"ai-home-head", name:"Homeowner Agent", subheading:true},
+          {id:"ai-home-ga", name:"Get Ahead! Extra Training Opportunity: Homeowner Agent", desc:"Watch this walkthrough of the Lofty AI Homeowner Agent to get a head start on setting up long-term client nurture automation.", tag:"training", link:"https://www.loom.com/share/fdb3102175814afab7974e574f006d28", ll:"Watch Loom recording"},
+          {id:"ai-home1", name:"Set up Homeowner Agent", desc:"Configure your AI Homeowner Agent to nurture past clients and homeowners — sending market updates, home value insights and check-ins to keep your database engaged long-term.", tag:"rec", link:"https://help.lofty.com/hc/en-us/articles/45507362712219-Homeowner-Agent#h_01KGG3F591BQ249F7D40ZYXRA2", ll:"Homeowner Agent guide"},
+        ]
+      },
+    ]
+  },
+  {
+    id:"transactions", icon:"📝", color:"#FEF3C7", bar:"#D97706",
+    title:"Transactions", sub:"Transaction management and checklists",
+    groups:[
+      {
+        label:"",
+        tasks:[
+          {id:"tx-ga1", name:"Get Ahead! Extra Training Opportunity: Transactions", desc:"Watch this walkthrough of Lofty Transactions to get a head start on understanding how transaction management, checklists and roles work within the platform.", tag:"training", link:"https://www.loom.com/share/4878910414ee48329b93e10e570cf05e?sid=856b055c-5d7f-4158-9c2b-3cd192ce2d85", ll:"Watch Loom recording"},
+          {id:"tx-r1", name:"Transaction roles setup", desc:"Define the roles involved in your transaction workflow — such as listing agent, buyer's agent, transaction coordinator and team lead. This is configured at the company level and can only be set up by a company admin.", tag:"rec", link:"https://help.lofty.com/hc/en-us/articles/360004792091-Vendor-and-Partner-Management", ll:"Transaction roles guide"},
+          {id:"tx-r2", name:"Transaction roles email notifications", desc:"Configure which email notifications each transaction role receives at each stage of the workflow — such as status changes, task assignments and deadline reminders. This is a personal setting configured per user.", tag:"rec"},
+          {id:"tx-a1", name:"Transaction checklists", desc:"Create checklists for each stage of your transaction workflow — listing, under contract, closing and post-close. Note: checklists can be set up at both the company level (visible to all agents) and the personal level (individual agent use), so be sure to configure them in the correct settings depending on your intended scope.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360057001712-Transaction-Management-Checklists", ll:"Transaction checklists"},
+          {id:"tx-d1", name:"Document templates", desc:"Create reusable document templates for your transaction workflow — such as listing agreements, disclosure forms and closing checklists. Configured at the company level by a company admin.", tag:"rec", link:"https://help.lofty.com/hc/en-us/articles/37425534313115-Transaction-Document-Templates", ll:"Document templates guide"},
+          {id:"tx-d2", name:"Field groups", desc:"Set up field groups to organize and standardize the data fields collected on each transaction record. Configured at the company level by a company admin.", tag:"rec"},
+          {id:"tx-a2", name:"Import/claim transaction data from the MLS", desc:"Pull in historical closed transactions from your MLS feed to build your track record in Lofty.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360057572991-Transaction-Management-Introduction", ll:"Claim transactions guide"},
+        ]
+      },
+    ]
+  },
+  {
+    id:"live", icon:"🟢", color:"#E6F7EF", bar:"#1A9E5C",
+    title:"Going Live", sub:"DNS, email configuration, test run and final launch steps",
+    groups:[
+      {
+        label:"Test Run (Optional)",
+        collapsible:true,
+        tasks:[
+          {id:"tr-b5", name:"Add a test lead", desc:"Create a dummy lead to verify routing and notifications work correctly.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360038382932-Add-a-Lead", ll:"Add a lead guide"},
+          {id:"tr-a2", name:"Apply a smart plan to the test lead", desc:"Assign an automated follow-up sequence to confirm smart plans trigger and run as expected.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/7626737520923-Managing-Smart-Plans", ll:"Smart plans guide"},
+          {id:"tr-a3", name:"Set up a property alert for the test lead", desc:"Configure an automated listing alert to confirm property notifications send correctly.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/217764483--Property-Alerts-Market-Snapshots-Lead-Engagement-", ll:"Property alerts guide"},
+          {id:"tr-n1", name:"Add a note to the test lead", desc:"Practice adding a contact note — verify it saves and appears in the lead's activity timeline.", tag:"rec"},
+          {id:"tr-c1", name:"Call and text the test lead", desc:"Place a test call and send a text from Lofty to confirm your call and text settings are working correctly.", tag:"rec"},
+          {id:"tr-t1", name:"Set up a task for the test lead", desc:"Create a follow-up task tied to the lead to verify task creation and reminders work.", tag:"rec"},
+          {id:"tr-ap1", name:"Set up an appointment for the test lead", desc:"Book a test appointment on the lead record to confirm calendar sync and scheduling work end-to-end.", tag:"rec"},
+          {id:"tr-tx1", name:"Create a test transaction", desc:"Create a test transaction record to verify your transaction workflow, checklists and pipeline stages are configured correctly.", tag:"rec"},
+        ]
+      },
+      {
+        label:"Final Steps",
+        collapsible:true,
+        tasks:[
+          {id:"gl-f1", name:"Configure DNS for your Lofty website domain", desc:"Point your custom domain to Lofty's servers so your website goes live.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360054554712-Domain-Configuration-Guide", ll:"Domain config guide"},
+          {id:"gl-e1", name:"Configure DNS for your sending email domain", desc:"Add SPF, DKIM and DMARC records so your CRM emails are delivered reliably and not marked as spam.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/4402367904397-Sending-Email-Address", ll:"DNS email guide"},
+          {id:"gl-f0", name:"Lead Import", desc:"Import your existing contacts into Lofty via CSV upload. Review field mapping, assignment defaults and welcome email settings before running your import.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360001710831-Lead-Import-via-CSV-Spreadsheet-", ll:"Lead import guide"},
+          {id:"gl-f2", name:"Activate auto property alerts", desc:"Turn on automated listing alerts so leads start receiving relevant property matches.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/115002891271-Setting-Up-and-Using-Auto-Property-Alerts", ll:"Property alerts guide"},
+          {id:"gl-ms1", name:"Market snapshot and market report", desc:"Activate market snapshot and market report emails so leads and past clients receive regular market updates for their area.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/217764483--Property-Alerts-Market-Snapshots-Lead-Engagement-", ll:"Market snapshots guide"},
+          {id:"gl-f5", name:"Turn on auto welcome emails", desc:"Activate the automated welcome email so new leads receive a branded introduction as soon as they register.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/360022134491-Set-Up-the-Welcome-Email", ll:"Welcome email guide"},
+          {id:"gl-sp1", name:"Turn on auto smart plans", desc:"Enable automated smart plan enrollment so new leads are immediately enrolled in the appropriate follow-up sequences based on your routing rules.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/7626737520923-Managing-Smart-Plans", ll:"Smart plans guide"},
+          {id:"gl-ai1", name:"Turn on AI", desc:"Activate your AI agent(s) — Sales Agent and/or Homeowner Agent — so they begin automatically engaging and nurturing leads according to your configured settings.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360056783851-AI-Assistant-Chatbot-Setup-Process", ll:"AI setup guide"},
+          {id:"gl-agents", name:"Activate Agents", desc:"Invite agents and/or import your agent roster now that setup is complete. Agents will receive login invitations and can begin using the platform immediately.", tag:"req", link:"https://help.chime.me/hc/en-us/articles/218038783-Add-or-Remove-Team-Members-on-Chime", ll:"Invite agents guide"},
+          {id:"crm-b4", name:"Post an announcement", desc:"Welcome your team to Lofty! Post an announcement to celebrate going live — introduce the platform, share any key instructions and let agents know they're all set to start working their leads.", tag:"rec", link:"https://help.chime.me/hc/en-us/articles/360046736752-Dashboard-Announcement-Board", ll:"Announcements guide"},
+        ]
+      },
+    ]
+  },
+];
+
+let activeFilter = 'all';
+
+function setFilter(f) {
+  activeFilter = f;
+  ['all','incomplete','complete','required','recommended','training'].forEach(x => {
+    const el = document.getElementById('f-'+x);
+    if (el) el.classList.toggle('active', x === f);
+  });
+  renderAll();
+}
+
+function taskVisible(t) {
+  if (t.subheading) return true;
+  if (activeFilter === 'all') return true;
+  if (activeFilter === 'incomplete') return !state[t.id];
+  if (activeFilter === 'complete') return !!state[t.id];
+  if (activeFilter === 'required') return t.tag !== 'rec' && t.tag !== 'training';
+  if (activeFilter === 'recommended') return t.tag === 'rec';
+  if (activeFilter === 'training') return t.tag === 'training';
+  if (activeFilter === 'recommended') return t.tag === 'rec';
+  return true;
+}
+
+let clientId = '';
+const SUPABASE_URL = 'https://oyzfxtaofgigdciwziuv.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95emZ4dGFvZmdpZ2RjaXd6aXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjI2NTksImV4cCI6MjA5NDc5ODY1OX0.GcK_nk-WQewDlU8oYZJFW5zzFdFfYVyhrP7OqOlVyBI';
+
+async function dbGet(clientId) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/checklist_progress?client_id=eq.${encodeURIComponent(clientId)}&select=state`, {
+    headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON }
+  });
+  const rows = await res.json();
+  return rows && rows.length > 0 ? rows[0].state : null;
+}
+
+async function dbSet(clientId, state) {
+  await fetch(`${SUPABASE_URL}/rest/v1/checklist_progress`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_ANON,
+      'Authorization': 'Bearer ' + SUPABASE_ANON,
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates'
+    },
+    body: JSON.stringify({ client_id: clientId, state: state, updated_at: new Date().toISOString() })
+  });
+}
+
+const STORAGE_KEY = 'lofty_onboarding_state_v1';
+let state = {}, saveTimer = null;
+
+function storageKey() {
+  return clientId ? 'lofty_checklist_' + clientId : STORAGE_KEY;
+}
+
+function applyClientId() {
+  const val = document.getElementById('setupInput').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
+  if (!val) return;
+  clientId = val;
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('client', val);
+    window.history.replaceState({}, '', url.toString());
+  } catch(e) {}
+  document.getElementById('setupOverlay').classList.remove('open');
+  showClientUI();
+  loadState();
+}
+
+function showClientUI() {
+  const badge = document.getElementById('clientBadge');
+  const btn = document.getElementById('shareBtn');
+  if (clientId) {
+    badge.textContent = clientId;
+    badge.style.display = '';
+    btn.style.display = '';
+  }
+}
+
+function copyShareLink() {
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('client', clientId);
+    navigator.clipboard.writeText(url.toString()).then(() => {
+      const btn = document.getElementById('shareBtn');
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '🔗 Share'; btn.classList.remove('copied'); }, 2000);
+    });
+  } catch(e) {
+    navigator.clipboard.writeText(window.location.origin + window.location.pathname + '?client=' + clientId);
+  }
+}
+
+async function loadState() {
+  if (!clientId) { renderAll(); setSave('No client', false); return; }
+  setSave('Loading…', false);
+  try {
+    const data = await dbGet(clientId);
+    state = data || {};
+  } catch(e) { state = {}; }
+  renderAll();
+  setSave('Synced', true);
+}
+
+async function saveState() {
+  if (!clientId) return;
+  setSave('Saving…', false);
+  try {
+    await dbSet(clientId, state);
+    setSave('Saved', true);
+  } catch(e) { setSave('Offline', false); }
+}
+
+function sched() { clearTimeout(saveTimer); saveTimer = setTimeout(saveState, 600); }
+function setSave(t, g) {
+  document.getElementById('saveText').textContent = t;
+  document.getElementById('saveDot').style.background = g ? '#1A9E5C' : '#F59E0B';
+}
+
+function totals() {
+  let done = 0, total = 0, optDone = 0, optTotal = 0;
+  SECTIONS.forEach(s => s.groups.forEach(g => g.tasks.forEach(t => {
+    if (t.subheading) return;
+    if (t.tag === 'rec' || t.tag === 'training') {
+      optTotal++;
+      if (state[t.id]) optDone++;
+    } else {
+      total++;
+      if (state[t.id]) done++;
+    }
+  })));
+  return { done, total, optDone, optTotal };
+}
+
+function tagLabel(tag) {
+  if (tag === 'req') return 'required';
+  if (tag === 'rec') return 'recommended';
+  if (tag === 'training') return 'training';
+  return 'recommended';
+}
+
+function renderAll() {
+  const el = document.getElementById('checklist');
+
+  // Capture currently open sections and sub-groups before re-render
+  const openSecs = new Set([...el.querySelectorAll('.sec.open')].map(e => e.dataset.id));
+  const openGrps = new Set([...el.querySelectorAll('.sub-grp.open')].map(e => e.dataset.gid));
+
+  el.innerHTML = '';
+
+  SECTIONS.forEach(s => {
+    let sd = 0, st = 0;
+    s.groups.forEach(g => g.tasks.forEach(t => {
+      if (t.subheading) return;
+      if (!taskVisible(t)) return;
+      // Required filter: only count required tasks
+      if (activeFilter === 'required' &&
+          (t.tag === 'opt' || t.tag === 'ai' || t.tag === 'training')) return;
+      // All filter: count everything with a checkbox
+      st++;
+      if (state[t.id]) sd++;
+    }));
+    const pct = st ? Math.round(sd / st * 100) : 0;
+
+    // Check if this section has any visible tasks under the current filter
+    const hasVisible = s.groups.some(g => g.tasks.some(t => !t.subheading && taskVisible(t)));
+    if (!hasVisible) return;
+
+    const div = document.createElement('div');
+    const secIndex = el.children.length;
+    const secBg = secIndex % 2 === 0 ? '#EEF2FF' : '#EDF0F4';
+    div.className = 'sec' + (openSecs.has(s.id) ? ' open' : '');
+    div.dataset.id = s.id;
+    div.style.background = secBg;
+
+    const groupsHTML = s.groups.map((g, gi) => {
+      const gid = s.id + '-grp-' + gi;
+      const tasksHTML = g.tasks.map(t => {
+        if (!taskVisible(t)) return '';
+        if (t.subheading) {
+          const isWarning = t.id && t.id.endsWith('-note');
+          return `<div class="task-subheading${isWarning ? ' warning-note' : ''}">
+            <div class="task-subheading-label">${t.name}</div>
+            ${isWarning && t.desc ? `<div class="task-subheading-desc">${t.desc}</div>` : ''}
+          </div>`;
+        }
+        return `
+          <div class="task ${state[t.id] ? 'done' : ''} ${t.tag === 'training' ? 'training-task' : ''}" onclick="togT('${t.id}')">
+            <div class="cb">
+              <svg class="ck" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="tb">
+              <div class="tn">${t.name}</div>
+              ${t.desc ? `<div class="td">${t.desc}</div>` : ''}
+              ${t.link ? `<a class="tl" href="${t.link}" target="_blank" onclick="event.stopPropagation()">📄 ${t.ll} ↗</a>` : ''}
+              ${state[t.id] ? `<div class="ds">Completed ${new Date(state[t.id]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>` : ''}
+            </div>
+            <span class="tag tag-${t.tag}">${tagLabel(t.tag)}</span>
+          </div>`;
+      }).join('');
+
+      const visibleTasks = g.tasks.filter(t => !t.subheading && taskVisible(t));
+      const hasVisibleTasks = visibleTasks.length > 0;
+      if (!hasVisibleTasks && !g.collapsible) {
+        return '';
+      }
+
+      if (g.collapsible) {
+        if (!hasVisibleTasks) return '';
+        let gd = 0, gt = 0;
+        g.tasks.forEach(t => { if (t.subheading) return; gt++; if (state[t.id]) gd++; });
+        const isOpen = openGrps.has(gid);
+        return `
+          <div class="sub-grp${isOpen ? ' open' : ''}" data-gid="${gid}">
+            <div class="sub-grp-hdr" onclick="togGrp('${gid}')">
+              <span class="sub-grp-label">${g.label}</span>
+              <span class="sub-grp-ct">${gd}/${gt}</span>
+              <span class="sub-grp-chev">▾</span>
+            </div>
+            <div class="sub-grp-body">${g.instructions ? `<div class="grp-instructions">${g.instructions}</div>` : ''}${tasksHTML}</div>
+          </div>`;
+      }
+
+      return `
+        ${g.label && hasVisibleTasks ? `<div class="grp-label">${g.label}${g.sublabel ? `<div class="grp-sublabel">🔓 ${g.sublabel}</div>` : ''}</div>` : ''}
+        ${g.instructions && hasVisibleTasks ? `<div class="grp-instructions">${g.instructions}</div>` : ''}
+        ${tasksHTML}`;
+    }).join('');
+
+    div.innerHTML = `
+      <div class="sh" onclick="tog('${s.id}')">
+        <div class="si" style="background:${s.color}">${s.icon}</div>
+        <div class="st">
+          <div class="sn">${s.title}${sd === st ? '<span class="cbadge">✓ Complete</span>' : ''}</div>
+          <div class="ss">${s.sub}</div>
+        </div>
+        <div class="sm">
+          <span class="sc">${sd}/${st}</span>
+          <span class="chev">▾</span>
+        </div>
+      </div>
+      <div class="sbar"><div class="sbf" style="width:${pct}%;background:${s.bar}"></div></div>
+      <div class="sbody">
+        ${s.intro ? s.intro : ''}
+        ${s.instructions ? `<div class="sec-instructions">${s.instructions}</div>` : ''}
+        ${groupsHTML}
+      </div>`;
+
+    el.appendChild(div);
+  });
+
+  updProg();
+}
+
+function tog(id) {
+  const clicked = document.querySelector(`.sec[data-id="${id}"]`);
+  const isOpen = clicked.classList.contains('open');
+  // Close all sections
+  document.querySelectorAll('.sec.open').forEach(s => s.classList.remove('open'));
+  // Open the clicked one only if it was closed
+  if (!isOpen) clicked.classList.add('open');
+}
+
+function togGrp(gid) {
+  const clicked = document.querySelector(`.sub-grp[data-gid="${gid}"]`);
+  const isOpen = clicked.classList.contains('open');
+  // Close all sub-groups within the same parent section
+  const parentSec = clicked.closest('.sec');
+  if (parentSec) {
+    parentSec.querySelectorAll('.sub-grp.open').forEach(g => g.classList.remove('open'));
+  }
+  // Open the clicked one only if it was closed
+  if (!isOpen) {
+    clicked.classList.add('open');
+    // Scroll the header into view smoothly
+    setTimeout(() => {
+      clicked.querySelector('.sub-grp-hdr').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }
+}
+
+function togT(id) {
+  state[id] ? delete state[id] : (state[id] = new Date().toISOString());
+  renderAll();
+  sched();
+}
+
+function updProg() {
+  const { done, total, optDone, optTotal } = totals();
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const optPct = optTotal ? Math.round(optDone / optTotal * 100) : 0;
+  document.getElementById('pf').style.width = pct + '%';
+  document.getElementById('pp').textContent = pct + '%';
+  document.getElementById('hdrPct').textContent = pct + '% complete';
+  document.getElementById('progSteps').textContent = done + ' of ' + total + ' required steps completed';
+  document.getElementById('pfOpt').style.width = optPct + '%';
+  document.getElementById('ppOpt').textContent = optPct + '%';
+  document.getElementById('progStepsOpt').textContent = optDone + ' of ' + optTotal + ' optional steps completed';
+  document.getElementById('cel').style.display = (done === total && total > 0) ? 'block' : 'none';
+}
+
+window.addEventListener('load', () => {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('client');
+  if (id) {
+    clientId = id;
+    showClientUI();
+    loadState();
+  } else {
+    document.getElementById('setupOverlay').classList.add('open');
+    document.getElementById('setupInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') applyClientId();
+    });
+    renderAll();
+    setSave('No client ID', false);
+  }
+});
+</script>
+</body>
+</html>
